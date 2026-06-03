@@ -1,0 +1,29 @@
+
+name: Compilar Executable Windows
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout codigo
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
+
+      - name: Compilar con PyInstaller
+        run: |
+          pyinstaller --onefile --windowed --name app_verificador_final app_verificador.py
+
+      - name: Subir Artefacto
+        uses: actions/upload-artifact@v3
+        with:
+          name: Aplicacion-Windows
+          path: dist/app_verificador_final.exe
